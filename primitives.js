@@ -56,8 +56,13 @@
 
         let fillRectTwoColors = () => {
             // This modifies the color vertically only.
+            console.log("this is two colors", c1, c2);
+            for (let i = 0; i < 3; i += 1) {
+              console.log((c1[i] + c2[i]) / 2);
+            }
+            let middle = right - parseInt(w/2);
             for (let i = y; i < bottom; i += 1) {
-                for (let j = x; j < right; j += 1) {
+                for (let j = x; j < middle; j += 1) {
                     setPixel(context, j, i, ...leftColor);
                 }
 
