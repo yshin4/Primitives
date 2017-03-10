@@ -55,10 +55,7 @@
         };
 
         let fillRectTwoColors = () => {
-            let midColor = [];
-            let horizontalDelta = [];
-            let verticalDelta = [];
-            let newMidColor = [];
+            let midColor = [], horizontalDelta = [], verticalDelta = [], newMidColor = [];
 
             for (let i = 0; i < 3; i += 1) {
               midColor[i] = (c1[i] + c2[i]) / 2;
@@ -70,51 +67,20 @@
             let horizontalMiddle = right - parseInt(w/2);
             let verticalMiddle = bottom - parseInt(h/2);
 
-            for (let i = y; i < verticalMiddle; i += 1) {
+            for (let i = y; i < bottom; i += 1) {
                 let currentLeftColor = [leftColor[0],leftColor[1],leftColor[2]];
-                for (let j = x; j < horizontalMiddle; j += 1) {
+                for (let j = x; j < right; j += 1) {
                     setPixel(context, j, i, ...currentLeftColor);
-                    currentLeftColor[0] += horizontalDelta[0];
-                    currentLeftColor[1] += horizontalDelta[1];
-                    currentLeftColor[2] += horizontalDelta[2];
-                }
-
-                for (let j = horizontalMiddle; j < right; j += 1) {
-                    setPixel(context, j, i, ...currentLeftColor);
-                    currentLeftColor[0] -= horizontalDelta[0];
-                    currentLeftColor[1] -= horizontalDelta[1];
-                    currentLeftColor[2] -= horizontalDelta[2];
+                    currentLeftColor[0] = j < horizontalMiddle ? currentLeftColor[0] + horizontalDelta[0] : currentLeftColor[0] - horizontalDelta[0];
+                    currentLeftColor[1] = j < horizontalMiddle ? currentLeftColor[1] + horizontalDelta[1] : currentLeftColor[1] - horizontalDelta[1];
+                    currentLeftColor[2] = j < horizontalMiddle ? currentLeftColor[2] + horizontalDelta[2] : currentLeftColor[2] - horizontalDelta[2];
                 }
 
                 for (let k = 0; k < 3; k +=1 ) {
-                    newMidColor[k] += verticalDelta[k];
+                    newMidColor[k] = i < verticalMiddle ? newMidColor[k] + verticalDelta[k] : newMidColor[k] - verticalDelta[k];
                     horizontalDelta[k] = (newMidColor[k] - c1[k]) / (w / 2);
                 }
             }
-
-            for (let i = verticalMiddle; i < bottom; i += 1) {
-                let currentLeftColor = [leftColor[0],leftColor[1],leftColor[2]];
-                for (let j = x; j < horizontalMiddle; j += 1) {
-                    setPixel(context, j, i, ...currentLeftColor);
-                    currentLeftColor[0] += horizontalDelta[0];
-                    currentLeftColor[1] += horizontalDelta[1];
-                    currentLeftColor[2] += horizontalDelta[2];
-                }
-
-                for (let j = horizontalMiddle; j < right; j += 1) {
-                    setPixel(context, j, i, ...currentLeftColor);
-                    currentLeftColor[0] -= horizontalDelta[0];
-                    currentLeftColor[1] -= horizontalDelta[1];
-                    currentLeftColor[2] -= horizontalDelta[2];
-                }
-
-                for (let k = 0; k < 3; k +=1 ) {
-                    newMidColor[k] -= verticalDelta[k];
-                    horizontalDelta[k] = (newMidColor[k] - c1[k]) / (w / 2);
-                }
-            }
-
-
         };
 
         let fillRectFourColors = () => {
