@@ -56,14 +56,32 @@
 
         let fillRectTwoColors = () => {
             // This modifies the color vertically only.
-            console.log("this is two colors", c1, c2);
+            let midColor = [];
+            let horizontalDelta = [];
             for (let i = 0; i < 3; i += 1) {
-              console.log((c1[i] + c2[i]) / 2);
+              midColor[i] = (c1[i] + c2[i]) / 2;
+              horizontalDelta[i] = (midColor[i] - c2[i]) / (w / 2);
             }
-            let middle = right - parseInt(w/2);
-            for (let i = y; i < bottom; i += 1) {
-                for (let j = x; j < middle; j += 1) {
-                    setPixel(context, j, i, ...leftColor);
+            let horizontalMiddle = right - parseInt(w/2);
+            let verticalMiddle = bottom - parseInt(h/2);
+            for (let i = y; i < verticalMiddle; i += 1) {
+                let currentLeftColor = [];
+                for (let i = 0; i < 3; i += 1) {
+                  currentLeftColor[i] = leftColor[i];
+                }
+
+                for (let j = horizontalMiddle; j < right; j += 1) {
+                    setPixel(context, j, i, ...currentLeftColor);
+                    currentLeftColor[0] += horizontalDelta[0];
+                    currentLeftColor[1] += horizontalDelta[1];
+                    currentLeftColor[2] += horizontalDelta[2];
+                }
+
+                for (let j = x; j < horizontalMiddle; j += 1) {
+                    setPixel(context, j, i, ...currentLeftColor);
+                    currentLeftColor[0] -= horizontalDelta[0];
+                    currentLeftColor[1] -= horizontalDelta[1];
+                    currentLeftColor[2] -= horizontalDelta[2];
                 }
 
                 // Move to the next level of the gradient.
@@ -71,6 +89,33 @@
                 leftColor[1] += leftVDelta[1];
                 leftColor[2] += leftVDelta[2];
             }
+
+            for (let i = verticalMiddle; i < bottom; i += 1) {
+                let currentLeftColor = [];
+                for (let i = 0; i < 3; i += 1) {
+                  currentLeftColor[i] = leftColor[i];
+                }
+
+                for (let j = horizontalMiddle; j < right; j += 1) {
+                    setPixel(context, j, i, ...currentLeftColor);
+                    currentLeftColor[0] += horizontalDelta[0];
+                    currentLeftColor[1] += horizontalDelta[1];
+                    currentLeftColor[2] += horizontalDelta[2];
+                }
+
+                for (let j = x; j < horizontalMiddle; j += 1) {
+                    setPixel(context, j, i, ...currentLeftColor);
+                    currentLeftColor[0] -= horizontalDelta[0];
+                    currentLeftColor[1] -= horizontalDelta[1];
+                    currentLeftColor[2] -= horizontalDelta[2];
+                }
+
+                // Move to the next level of the gradient.
+                leftColor[0] -= leftVDelta[0];
+                leftColor[1] -= leftVDelta[1];
+                leftColor[2] -= leftVDelta[2];
+            }
+
         };
 
         let fillRectFourColors = () => {
@@ -108,9 +153,9 @@
             fillRectOneColor();
         } else if (!c3) {
             // For this case, we set up the left vertical deltas.
-            leftVDelta = [(c2[0] - c1[0]) / h,
-                (c2[1] - c1[1]) / h,
-                (c2[2] - c1[2]) / h];
+            leftVDelta = [(c2[0] - c1[0]) / (h / 2),
+                (c2[1] - c1[1]) / (h / 2),
+                (c2[2] - c1[2]) / (h / 2)];
             fillRectTwoColors();
         } else {
             // The four-color case, with a quick assignment in case
