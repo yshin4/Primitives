@@ -55,58 +55,49 @@
         };
 
         let fillRectTwoColors = () => {
-            // This modifies the color vertically only.
             let midColor = [];
             let horizontalDelta = [];
+            let verticalDelta = [];
+            let newMidColor = [];
+
             for (let i = 0; i < 3; i += 1) {
               midColor[i] = (c1[i] + c2[i]) / 2;
-              verticalDelta[i] = (midColor[i] - c2[i]) / (h / 2);
+              horizontalDelta[i] = (midColor[i] - c1[i]) / (w / 2);
+              verticalDelta[i] = (c2[i] - midColor[i]) / (h / 2);
+              newMidColor[i] = midColor[i];
             }
+            console.log("light green is " + c2);
+            console.log("dark red is " + c1);
             let horizontalMiddle = right - parseInt(w/2);
             let verticalMiddle = bottom - parseInt(h/2);
-            for (let i = y; i < bottom; i += 1) {
-                let currentLeftColor = [leftColor[0],leftColor[1],leftColor[2]];
-                horizontalDelta += horizontalDelta;
 
+            for (let i = y; i < verticalMiddle; i += 1) {
+                let currentLeftColor = [leftColor[0],leftColor[1],leftColor[2]];
                 //horizontalDelta has to be from start to midPoint color change over distance which is w/2
                 //verticalDelta has to be from midPoint to endColor change over h/2
 
                 //each inner for loop going from left to right has to add from curentcolor which starts at startColor and horizontalDelta each time
                 //each outer for loop has to modify the horizontalDelta because the end point changes each time
-                for (let j = x; j < right; j += 1) {
+                for (let j = x; j < horizontalMiddle; j += 1) {
                     setPixel(context, j, i, ...currentLeftColor);
                     currentLeftColor[0] += horizontalDelta[0];
                     currentLeftColor[1] += horizontalDelta[1];
                     currentLeftColor[2] += horizontalDelta[2];
                 }
-                // Move to the next level of the gradient.
+
+                for (let j = horizontalMiddle; j < right; j += 1) {
+                    setPixel(context, j, i, ...currentLeftColor);
+                    currentLeftColor[0] -= horizontalDelta[0];
+                    currentLeftColor[1] -= horizontalDelta[1];
+                    currentLeftColor[2] -= horizontalDelta[2];
+                }
+
+                for (let k = 0; k < 3; k +=1 ) {
+                    newMidColor[k] += verticalDelta[k];
+                    horizontalDelta[k] = (newMidColor[k] - c1[k]) / (w / 2);
+                }
             }
 
-            // for (let i = verticalMiddle; i < bottom; i += 1) {
-            //     let currentLeftColor = [];
-            //     for (let i = 0; i < 3; i += 1) {
-            //       currentLeftColor[i] = leftColor[i];
-            //     }
-            //
-            //     for (let j = horizontalMiddle; j < right; j += 1) {
-            //         setPixel(context, j, i, ...currentLeftColor);
-            //         currentLeftColor[0] += horizontalDelta[0];
-            //         currentLeftColor[1] += horizontalDelta[1];
-            //         currentLeftColor[2] += horizontalDelta[2];
-            //     }
-            //
-            //     for (let j = x; j < horizontalMiddle; j += 1) {
-            //         setPixel(context, j, i, ...currentLeftColor);
-            //         currentLeftColor[0] -= horizontalDelta[0];
-            //         currentLeftColor[1] -= horizontalDelta[1];
-            //         currentLeftColor[2] -= horizontalDelta[2];
-            //     }
-            //
-            //     // Move to the next level of the gradient.
-            //     leftColor[0] -= leftVDelta[0];
-            //     leftColor[1] -= leftVDelta[1];
-            //     leftColor[2] -= leftVDelta[2];
-            // }
 
         };
 
