@@ -9,6 +9,10 @@ window.Nanoshop = {
      */
     darkener: (x, y, r, g, b, a) => [ r / 2, g / 2, b / 2, a ],
 
+    winter: (x, y, r, g, b, a) => [ r, g, b + 10, a ],
+
+    summer: (x, y, r, g, b, a) => [ r + 10, g + 5, b, a ],    
+
     /*
      * Applies the given filter to the given ImageData object,
      * then modifies its pixels according to the given filter.

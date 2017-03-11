@@ -60,12 +60,12 @@
             for (let i = 0; i < 3; i += 1) {
               midColor[i] = (c1[i] + c2[i]) / 2;
               horizontalDelta[i] = (midColor[i] - c1[i]) / (w / 2);
-              verticalDelta[i] = parseInt((c2[i] - midColor[i]) / (h / 2));
+              verticalDelta[i] = (c2[i] - midColor[i]) / (h / 2);
               newMidColor[i] = midColor[i];
             }
 
-            let horizontalMiddle = right - parseInt(w / 2);
-            let verticalMiddle = bottom - parseInt(h / 2);
+            let horizontalMiddle = right - w / 2;
+            let verticalMiddle = bottom - h / 2;
 
             for (let i = y; i < bottom; i += 1) {
                 let currentLeftColor = [leftColor[0],leftColor[1],leftColor[2]];
@@ -80,6 +80,7 @@
                     newMidColor[k] = i < verticalMiddle ? newMidColor[k] + verticalDelta[k] : newMidColor[k] - verticalDelta[k];
                     horizontalDelta[k] = (newMidColor[k] - c1[k]) / (w / 2);
                 }
+                console.log(newMidColor);
             }
         };
 

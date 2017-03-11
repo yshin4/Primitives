@@ -97,7 +97,7 @@
         renderingContext.putImageData(
             Nanoshop.applyFilter(
                 renderingContext.getImageData(0, 0, canvas.width, canvas.height),
-                Nanoshop.darkener
+                Nanoshop.summer
             ),
             0, 0
         );
