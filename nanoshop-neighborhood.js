@@ -16,6 +16,48 @@ window.NanoshopNeighborhood = {
             rgbaNeighborhood[4].a
         ],
 
+    rgbShifter: (x, y, rgbaNeighborhood) => {
+        return [rgbaNeighborhood[0].r, rgbaNeighborhood[3].g, rgbaNeighborhood[6].b, rgbaNeighborhood[4].a];
+    },
+
+    purpleBlur: (x, y, rgbaNeighborhood) => {
+        let pTotal = 0;
+
+        for (let i = 0; i < 9; i += 1) {
+            pTotal += rgbaNeighborhood[i].r + rgbaNeighborhood[i].b;
+        }
+
+        return [pTotal / 18, 0, pTotal / 18, rgbaNeighborhood[4].a];
+    },
+
+    divideBlur: (x, y, rgbaNeighborhood) => {
+        let width = 800, height = 750;
+        let rTotal = 0;
+        let gTotal = 0;
+        let bTotal = 0;
+        let yTotal = 0;
+
+        if (x < width / 2 && y < height / 2) {
+            for (let i = 0; i < 9; i += 1) {
+                rTotal += rgbaNeighborhood[i].r;
+            }
+        } else if (x < width / 2 && y > height / 2) {
+            for (let i = 0; i < 9; i += 1) {
+                gTotal += rgbaNeighborhood[i].g;
+            }
+        } else if (x > width / 2 && y < height / 2) {
+            for (let i = 0; i < 9; i += 1) {
+                bTotal += rgbaNeighborhood[i].b;
+            }
+        } else if ( x > width / 2 && y > height / 2){
+            for (let i = 0; i < 9; i += 1) {
+                yTotal += (rgbaNeighborhood[i].r + rgbaNeighborhood[i].g);
+            }
+            return [yTotal / 18, yTotal / 18, 0, rgbaNeighborhood[4].a];
+        }
+        return [rTotal / 9, gTotal / 9, bTotal / 9, rgbaNeighborhood[4].a];
+    },
+
     /*
      * A basic "averager"---this one returns the average of all the pixels in the
      * given neighborhood.

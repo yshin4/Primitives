@@ -131,7 +131,7 @@
             NanoshopNeighborhood.applyFilter(
                 renderingContext,
                 renderingContext.getImageData(0, 0, canvas.width, canvas.height),
-                NanoshopNeighborhood.averager
+                NanoshopNeighborhood.rgbShifter
             ),
             0, 0
         );
