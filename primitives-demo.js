@@ -37,8 +37,10 @@
         { x: 80, y: 100 },
         { x: 140, y: 50 },
         { x: 140, y: 80 },
-        { x: 110, y: 50 }
-    ]);
+        { x: 110, y: 50 }],
+        [100, 100, 255],
+        [255, 100, 100]
+    );
     renderingContext.restore();
 
     renderingContext.save();
@@ -46,8 +48,10 @@
     Primitives.fillPolygon(renderingContext, [
         { x: 50, y: 5 },
         { x: 100, y: 80 },
-        { x: 120, y: 40 }
-    ]);
+        { x: 120, y: 40 }],
+        [100, 100, 255],
+        [255, 100, 100]
+    );
     renderingContext.restore();
 
     renderingContext.save();
@@ -56,8 +60,10 @@
         { x: 30, y: 40 },
         { x: 100, y: 40 },
         { x: 100, y: 100 },
-        { x: 30, y: 100 }
-    ]);
+        { x: 30, y: 100 }],
+        [100, 100, 255],
+        [255, 100, 100]
+    );
     renderingContext.restore();
 
     renderingContext.save();
@@ -68,8 +74,10 @@
         { x: 100, y: 90 },
         { x: 50, y: 100 },
         { x: 15, y: 80 },
-        { x: 10, y: 50 }
-    ]);
+        { x: 10, y: 50 }],
+        [100, 100, 255],
+        [255, 100, 100]
+    );
     renderingContext.restore();
 
     renderingContext.save();
@@ -79,7 +87,9 @@
         { x: 150, y: 100 },
         { x: 20, y: 40 },
         { x: 180, y: 40 },
-        { x: 50, y: 100 }
-    ]);
+        { x: 50, y: 100 }],
+        [100, 100, 255],
+        [255, 100, 100]
+    );
     renderingContext.restore();
 })();

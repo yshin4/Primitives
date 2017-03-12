@@ -49,7 +49,7 @@ window.NanoshopNeighborhood = {
             for (let i = 0; i < 9; i += 1) {
                 bTotal += rgbaNeighborhood[i].b;
             }
-        } else if ( x > width / 2 && y > height / 2){
+        } else if (x > width / 2 && y > height / 2) {
             for (let i = 0; i < 9; i += 1) {
                 yTotal += (rgbaNeighborhood[i].r + rgbaNeighborhood[i].g);
             }

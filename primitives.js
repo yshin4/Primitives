@@ -63,8 +63,8 @@
             let centerY = y + h / 2;
 
             for (let i = 0; i < 3; i += 1) {
-              colorSum[i] = c1[i] + c2[i];
-              currentColor[i] = c1[i];
+                colorSum[i] = c1[i] + c2[i];
+                currentColor[i] = c1[i];
             }
 
             for (let i = y; i < bottom; i += 1) {
@@ -73,7 +73,7 @@
                     distanceFromCenter = Math.sqrt(Math.pow(centerX - j, 2) + Math.pow(centerY - i, 2));
                     let distanceProportion = (distanceFromCenter / radius);
                     for (let k = 0; k < 3; k += 1) {
-                        currentColor[k] = colorSum[k]  - c2[k] * distanceProportion;
+                        currentColor[k] = colorSum[k] - c2[k] * distanceProportion;
                     }
                 }
             }
@@ -402,7 +402,7 @@
     };
 
     // Now to the function itself.
-    let fillPolygon = (context, polygon, color) => {
+    let fillPolygon = (context, polygon, c1, c2) => {
 
         /*
          * A useful helper function: this "snaps" a given y coordinate
@@ -456,7 +456,8 @@
         let edgesToRemove;       // For use when, well, removing edges from a list.
 
         // The usual color guard.
-        color = color || [0, 0, 0];
+        c1 = c1 || [0, 0, 0];
+        c2 = c2 || [200, 200, 200];
 
         // Create the global edge list.
         for (let i = 0, max = polygon.length; i < max; i += 1) {
@@ -478,11 +479,19 @@
             edge1.currentX - edge2.currentX
         );
 
+        let polygonMaxY = toScanLine(globalEdgeList[globalEdgeList.length-1].maxY);
+        let polygonMinY = toScanLine(globalEdgeList[0].minY);
+        let polygonHeight = polygonMaxY - polygonMinY;
+        console.log(polygonHeight);
+
         // We start at the lowest y coordinate.
         currentScanLine = toScanLine(globalEdgeList[0].minY);
 
         // Initialize the active edge list.
         globalEdgeList = moveMatchingMinYs(globalEdgeList, activeEdgeList, currentScanLine);
+
+        //let polygonHeight = globalEdgeList[globalEdgeList.length-1].maxY;
+
 
         // Start scanning!
         drawPixel = false;
@@ -492,13 +501,18 @@
                 // If we're drawing pixels, we draw until we reach the x
                 // coordinate of this edge. Otherwise, we just remember where we
                 // are then move on.
+                //let polygonHeight = globalEdgeList[globalEdgeList.length-1].maxY;
                 if (drawPixel) {
                     toX = toScanLine(activeEdgeList[i].currentX);
+                    let delta = [(c2[0] - c1[0]) / polygonHeight, (c2[1] - c1[1]) / polygonHeight, (c2[2] - c1[2]) / polygonHeight];
 
                     // No cheating here --- draw each pixel, one by one.
                     for (let x = fromX; x <= toX; x += 1) {
-                        setPixel(context, x, currentScanLine, ...color);
+                        setPixel(context, x, currentScanLine, ...c1);
                     }
+                    c1[0] += delta[0];
+                    c1[1] += delta[1];
+                    c1[2] += delta[2];
                 } else {
                     fromX = toScanLine(activeEdgeList[i].currentX);
                 }
@@ -510,7 +524,7 @@
             // encountered an odd number of edges, and need to draw a single
             // pixel.
             if (drawPixel) {
-                setPixel(context, fromX, currentScanLine, ...color);
+                setPixel(context, fromX, currentScanLine, ...c1);
                 drawPixel = !drawPixel;
             }
 
