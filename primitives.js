@@ -63,18 +63,18 @@
             let centerY = y + h / 2;
 
             for (let i = 0; i < 3; i += 1) {
-                colorSum[i] = c1[i] + c2[i];
+                colorSum[i] = (c1[i] + c2[i]) > 255 ? c1[i] * 10 + c2[i] : c1[i] + c2[i];
                 currentColor[i] = c1[i];
             }
 
             for (let i = y; i < bottom; i += 1) {
                 for (let j = x; j < right; j += 1) {
-                    setPixel(context, j, i, ...currentColor);
                     distanceFromCenter = Math.sqrt(Math.pow(centerX - j, 2) + Math.pow(centerY - i, 2));
                     let distanceProportion = (distanceFromCenter / radius);
                     for (let k = 0; k < 3; k += 1) {
                         currentColor[k] = colorSum[k] - c2[k] * distanceProportion;
                     }
+                    setPixel(context, j, i, ...currentColor);
                 }
             }
         };
@@ -134,6 +134,7 @@
                 (c4[1] - c2[1]) / h,
                 (c4[2] - c2[2]) / h];
             fillRectFourColors();
+            fillRectTwoColors();
         }
     };
 
