@@ -457,7 +457,7 @@
 
         // The usual color guard.
         c1 = c1 || [0, 0, 0];
-        c2 = c2 || [200, 200, 200];
+        c2 = c2 || c1;
 
         // Create the global edge list.
         for (let i = 0, max = polygon.length; i < max; i += 1) {
@@ -479,19 +479,15 @@
             edge1.currentX - edge2.currentX
         );
 
-        let polygonMaxY = toScanLine(globalEdgeList[globalEdgeList.length-1].maxY);
+        let polygonMaxY = toScanLine(globalEdgeList[globalEdgeList.length - 1].maxY);
         let polygonMinY = toScanLine(globalEdgeList[0].minY);
         let polygonHeight = polygonMaxY - polygonMinY;
-        console.log(polygonHeight);
 
         // We start at the lowest y coordinate.
         currentScanLine = toScanLine(globalEdgeList[0].minY);
 
         // Initialize the active edge list.
         globalEdgeList = moveMatchingMinYs(globalEdgeList, activeEdgeList, currentScanLine);
-
-        //let polygonHeight = globalEdgeList[globalEdgeList.length-1].maxY;
-
 
         // Start scanning!
         drawPixel = false;
@@ -501,10 +497,12 @@
                 // If we're drawing pixels, we draw until we reach the x
                 // coordinate of this edge. Otherwise, we just remember where we
                 // are then move on.
-                //let polygonHeight = globalEdgeList[globalEdgeList.length-1].maxY;
+
                 if (drawPixel) {
                     toX = toScanLine(activeEdgeList[i].currentX);
-                    let delta = [(c2[0] - c1[0]) / polygonHeight, (c2[1] - c1[1]) / polygonHeight, (c2[2] - c1[2]) / polygonHeight];
+                    let delta = [(c2[0] - c1[0]) / polygonHeight,
+                        (c2[1] - c1[1]) / polygonHeight,
+                        (c2[2] - c1[2]) / polygonHeight];
 
                     // No cheating here --- draw each pixel, one by one.
                     for (let x = fromX; x <= toX; x += 1) {
