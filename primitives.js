@@ -55,7 +55,7 @@
         };
 
         let fillRectTwoColors = () => {
-            let colorSum = [];
+            let colorDiff = [];
             let radius = h < w ? h / 2 : w / 2;
             let distanceFromCenter;
             let currentColor = [];
@@ -63,16 +63,15 @@
             let centerY = y + h / 2;
 
             for (let i = 0; i < 3; i += 1) {
-                colorSum[i] = (c1[i] + c2[i]) > 255 ? c1[i] * 10 + c2[i] : c1[i] + c2[i];
-                currentColor[i] = c1[i];
+                colorDiff[i] = c2[i] - c1[i];
             }
 
             for (let i = y; i < bottom; i += 1) {
                 for (let j = x; j < right; j += 1) {
                     distanceFromCenter = Math.sqrt(Math.pow(centerX - j, 2) + Math.pow(centerY - i, 2));
-                    let distanceProportion = (distanceFromCenter / radius);
+                    let distanceProportion = distanceFromCenter / radius > 1 ? 1 : distanceFromCenter / radius;
                     for (let k = 0; k < 3; k += 1) {
-                        currentColor[k] = colorSum[k] - c2[k] * distanceProportion;
+                        currentColor[k] = c2[k] - colorDiff[k] * distanceProportion;
                     }
                     setPixel(context, j, i, ...currentColor);
                 }
@@ -484,6 +483,10 @@
         let polygonMinY = toScanLine(globalEdgeList[0].minY);
         let polygonHeight = polygonMaxY - polygonMinY;
 
+        let delta = [(c2[0] - c1[0]) / polygonHeight,
+            (c2[1] - c1[1]) / polygonHeight,
+            (c2[2] - c1[2]) / polygonHeight];
+
         // We start at the lowest y coordinate.
         currentScanLine = toScanLine(globalEdgeList[0].minY);
 
@@ -501,17 +504,11 @@
 
                 if (drawPixel) {
                     toX = toScanLine(activeEdgeList[i].currentX);
-                    let delta = [(c2[0] - c1[0]) / polygonHeight,
-                        (c2[1] - c1[1]) / polygonHeight,
-                        (c2[2] - c1[2]) / polygonHeight];
 
                     // No cheating here --- draw each pixel, one by one.
                     for (let x = fromX; x <= toX; x += 1) {
                         setPixel(context, x, currentScanLine, ...c1);
                     }
-                    c1[0] += delta[0];
-                    c1[1] += delta[1];
-                    c1[2] += delta[2];
                 } else {
                     fromX = toScanLine(activeEdgeList[i].currentX);
                 }
@@ -529,6 +526,10 @@
 
             // Go to the next scan line.
             currentScanLine += 1;
+
+            c1[0] += delta[0];
+            c1[1] += delta[1];
+            c1[2] += delta[2];
 
             // Remove edges for which we have reached the maximum y.
             edgesToRemove = [];
