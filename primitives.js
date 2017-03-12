@@ -55,7 +55,7 @@
         };
 
         let fillRectTwoColors = () => {
-            let colorDiff = [];
+            let colorSum = [];
             let radius = h < w ? h / 2 : w / 2;
             let distanceFromCenter;
             let currentColor = [];
