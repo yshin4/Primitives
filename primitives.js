@@ -55,32 +55,27 @@
         };
 
         let fillRectTwoColors = () => {
-            let midColor = [], horizontalDelta = [], verticalDelta = [], newMidColor = [];
+            let colorDiff = [];
+            let radius = h < w ? h / 2 : w / 2;
+            let distanceFromCenter;
+            let currentColor = [];
+            let centerX = x + w / 2;
+            let centerY = y + h / 2;
 
             for (let i = 0; i < 3; i += 1) {
-              midColor[i] = (c1[i] + c2[i]) / 2;
-              horizontalDelta[i] = (midColor[i] - c1[i]) / (w / 2);
-              verticalDelta[i] = (c2[i] - midColor[i]) / (h / 2);
-              newMidColor[i] = midColor[i];
+              colorSum[i] = c1[i] + c2[i];
+              currentColor[i] = c1[i];
             }
 
-            let horizontalMiddle = right - w / 2;
-            let verticalMiddle = bottom - h / 2;
-
             for (let i = y; i < bottom; i += 1) {
-                let currentLeftColor = [leftColor[0],leftColor[1],leftColor[2]];
                 for (let j = x; j < right; j += 1) {
-                    setPixel(context, j, i, ...currentLeftColor);
-                    currentLeftColor[0] = j < horizontalMiddle ? currentLeftColor[0] + horizontalDelta[0] : currentLeftColor[0] - horizontalDelta[0];
-                    currentLeftColor[1] = j < horizontalMiddle ? currentLeftColor[1] + horizontalDelta[1] : currentLeftColor[1] - horizontalDelta[1];
-                    currentLeftColor[2] = j < horizontalMiddle ? currentLeftColor[2] + horizontalDelta[2] : currentLeftColor[2] - horizontalDelta[2];
+                    setPixel(context, j, i, ...currentColor);
+                    distanceFromCenter = Math.sqrt(Math.pow(centerX - j, 2) + Math.pow(centerY - i, 2));
+                    let distanceProportion = (distanceFromCenter / radius);
+                    for (let k = 0; k < 3; k += 1) {
+                        currentColor[k] = colorSum[k]  - c2[k] * distanceProportion;
+                    }
                 }
-
-                for (let k = 0; k < 3; k +=1 ) {
-                    newMidColor[k] = i < verticalMiddle ? newMidColor[k] + verticalDelta[k] : newMidColor[k] - verticalDelta[k];
-                    horizontalDelta[k] = (newMidColor[k] - c1[k]) / (w / 2);
-                }
-                console.log(newMidColor);
             }
         };
 
